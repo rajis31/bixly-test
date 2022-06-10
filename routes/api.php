@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TruckController;
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\BoatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get("/cars", [CarController::class, "index"]);
+    Route::get("/cars/{id}", [CarController::class, "show"]);
+    Route::post("/cars", [CarController::class, "store"]);
+    Route::put("/cars", [CarController::class, "update"]);
+    Route::delete("/cars/{id}", [CarController::class, "destroy"]);
+
+    Route::get("/trucks", [TruckController::class, "index"]);
+    Route::get("/trucks/{id}", [TruckController::class, "show"]);
+    Route::post("/trucks", [TruckController::class, "store"]);
+    Route::put("/trucks", [TruckController::class, "update"]);
+    Route::delete("/trucks/{id}", [TruckController::class, "destroy"]);
+
+    Route::get("/boats", [BoatController::class, "index"]);
+    Route::get("/boats/{id}", [BoatController::class, "show"]);
+    Route::post("/boats", [BoatController::class, "store"]);
+    Route::put("/boats", [BoatController::class, "update"]);
+    Route::delete("/boats/{id}", [BoatController::class, "destroy"]);
+
 });
