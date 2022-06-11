@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -12,13 +13,14 @@ class UserController extends Controller
          * Register User
          */
         $fields = $request->validate([
-            "name" => "required|string",
+            "username" => "required|string",
             "email" => "required|string|unique:users,email",
-            "password" => "required|string|confirmed",
+            "password" => "required|string",
+            "password_confirm" => "required_with:password|same:password",
         ]);
 
         $user = User::create([
-            'name' => $fields["name"],
+            'name' => $fields["username"],
             "email" => $fields["email"],
             "password" => bcrypt($fields["password"])
         ]);
@@ -34,7 +36,7 @@ class UserController extends Controller
 
     public function login(Request $request){
         $fields = $request->validate([
-            "email" => "required|string",
+            "username" => "required|string",
             "password" => "required|string",
         ]);
 
