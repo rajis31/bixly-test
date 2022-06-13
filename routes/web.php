@@ -17,10 +17,15 @@ use App\Http\Controllers\UserController;
 Route::get('/', function () {
     return view('auth.login');
 });
+
 Route::post("/", [UserController::class, "login"]);
 
 Route::get('/register', function () {
     return view('auth.register');
 });
+
 Route::post("/register", [UserController::class, "register"]);
 
+Route::get('/app', function () {
+    return view('app');
+});
