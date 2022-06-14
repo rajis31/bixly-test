@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AppController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->name("login");
 
 Route::post("/", [UserController::class, "login"]);
 
@@ -25,7 +26,4 @@ Route::get('/register', function () {
 });
 
 Route::post("/register", [UserController::class, "register"]);
-
-Route::get('/app', function () {
-    return view('app');
-});
+Route::get('/app', [AppController::class, "showPage"]);

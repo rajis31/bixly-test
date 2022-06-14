@@ -18,6 +18,10 @@ use App\Http\Controllers\BoatController;
 */
 
 Route::middleware('auth:sanctum')->group(function(){
+    Route::get("/csrf", function(){
+        return ["csrf" => csrf_token()];
+    });
+
     Route::get("/cars", [CarController::class, "index"]);
     Route::get("/cars/{id}", [CarController::class, "show"]);
     Route::post("/cars", [CarController::class, "store"]);

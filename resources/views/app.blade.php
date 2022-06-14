@@ -20,6 +20,7 @@
             </div>
             <div class="modal-body">
                 <form action="" class="form" method="POST">
+                    @csrf
                     <label for="vehicle_type">Vehicle Type</label>
                     <select class="custom-select" name="vehicle_type">
                         <option value="" default>Choose One</option>
@@ -181,7 +182,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary add-vehicle-submit">Add Vehicle</button>
             </div>
         </div>
     </div>
