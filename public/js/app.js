@@ -23,41 +23,36 @@ add_vehicle_submit.addEventListener("click", async () => {
             data[e.querySelector("input").name] = e.querySelector("input").value;
         }
     });
-    console.log({
-        'withCredentials': true,
-        'credentials': 'include',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        "Authorization" : "Bearer " + getCookie("token")
-    });
-
-    const res = await fetch(window.location.origin + "/api/csrf", {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            "Authorization" :  "Bearer 123"
-        },
-    });
-
-    console.log(res);
 
 
-    res = await fetch(window.location.origin + "/api/" + vehicle_selected.value+"s", {
+    // console.log({
+    //     'withCredentials': true,
+    //     'credentials': 'include',
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //     "Authorization" : "Bearer " + getCookie("token")
+    // });
+
+    const csrf = await fetch(window.location.origin + "/api/csrf", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             "Authorization" :  "Bearer "+getCookie("token")
         },
-        body: JSON.stringify(data)
-    });
+    }).then(res => res.json());
 
-    console.log(res);
+    const res = await fetch(window.location.origin + "/api/" + vehicle_selected.value+"s", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf.csrf,
+            "Authorization" :  "Bearer "+getCookie("token")
+        },
+        body: JSON.stringify(data)
+    }).then(res => res.json())
+      .catch(err => console.log(err));
 });
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
+

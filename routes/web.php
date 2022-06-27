@@ -19,6 +19,7 @@ Route::get('/', function () {
     return view('auth.login');
 })->name("login");
 
+
 Route::post("/", [UserController::class, "login"]);
 
 Route::get('/register', function () {
