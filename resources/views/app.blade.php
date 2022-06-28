@@ -14,30 +14,36 @@
   </thead>
   <tbody>
     @foreach($boats as $boat)
-        <tr>
+        <tr identification="{{ $boat->hin }}">
             <th scope="row">Boat</th>
             <td>{{ $boat->hin }}</td>
+            <td>{{ $boat->created_at }}</td>
+            <td> <button class="btn btn-primary">Update</button> </td>
+            <td> <button class="btn btn-warning">Delete</button> </td>
         </tr>
     @endforeach
 
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
+    @foreach($trucks as $truck)
+        <tr identification="{{ $truck->vin }}">
+            <th scope="row">Truck</th>
+            <td>{{ $truck->vin }}</td>
+            <td>{{ $truck->created_at }}</td>
+            <td> <button class="btn btn-primary">Update</button> </td>
+            <td> <button class="btn btn-warning">Delete</button> </td>
+        </tr>
+    @endforeach
+
+    @foreach($cars as $car)
+        <tr identification="{{ $car->vin }}">
+            <th scope="row">Car</th>
+            <td>{{ $car->vin }}</td>
+            <td>{{ $car->created_at }}</td>
+            <td> <button class="btn btn-primary">Update</button> </td>
+            <td> <button class="btn btn-warning">Delete</button> </td>
+        </tr>
+    @endforeach
+    
+
   </tbody>
 </table>
 
