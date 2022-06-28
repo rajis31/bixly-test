@@ -1,14 +1,55 @@
 @extends("layouts.base")
 
 @section("body")
-<div class="card">
+<!-- Display Vehicles -->
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Vehicle Type</th>
+      <th scope="col">VIN/HIN</th>
+      <th scope="col">Date Entered</th>
+      <th scope="col">Update</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach($boats as $boat)
+        <tr>
+            <th scope="row">Boat</th>
+            <td>{{ $boat->hin }}</td>
+        </tr>
+    @endforeach
 
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<!-- Add Vehicle -->
+<div class="card">
     <button data-toggle="modal" data-target="#add_vehicle">
         Add Vehicle
     </button>
 </div>
 
-<!-- Add Product -->
 <div class="modal fade" id="add_vehicle" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -19,7 +60,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" class="form" method="POST">
+                <form action="" class="form vehicle-form" method="POST">
                     @csrf
                     <label for="vehicle_type">Vehicle Type</label>
                     <select class="custom-select" name="vehicle_type">

@@ -35,6 +35,18 @@ class BoatController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'hin'              => 'required|unique:boat',
+            'make'             => 'required',
+            'model'            => 'required',
+            'year'             => 'required',
+            'length'           => 'required',
+            'width'            => 'required',
+            'current_hours'    => 'required',
+            'service_interval' => 'required',
+            'next_service'     => 'required'
+        ]);
+
         return Boat::create($request->all());
     }
 

@@ -19,4 +19,7 @@ class Boat extends Model
         "service_interval",
         "next_service"
     ];
+
+    protected $table = "boat";
+
 }

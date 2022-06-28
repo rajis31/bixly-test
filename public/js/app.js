@@ -25,14 +25,6 @@ add_vehicle_submit.addEventListener("click", async () => {
     });
 
 
-    // console.log({
-    //     'withCredentials': true,
-    //     'credentials': 'include',
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json',
-    //     "Authorization" : "Bearer " + getCookie("token")
-    // });
-
     const csrf = await fetch(window.location.origin + "/api/csrf", {
         method: 'POST',
         headers: {
@@ -52,7 +44,22 @@ add_vehicle_submit.addEventListener("click", async () => {
         },
         body: JSON.stringify(data)
     }).then(res => res.json())
-      .catch(err => console.log(err));
+      .catch(err => err);
+
+    if(await res?.errors){
+        let vehicle_form = document.querySelector(".vehicle-form");
+        vehicle_form?.querySelectorAll(".alert-danger")?.forEach(e=>e.remove());
+
+        Object.values(res.errors).forEach( error => {
+            let element = document.createElement("div");
+            element.classList.add(...["alert","alert-danger"]);
+            element.innerText = Object.values(error);
+            vehicle_form.appendChild(element);
+        });
+
+    } else {
+        window.location.reload();
+    }
 });
 
 

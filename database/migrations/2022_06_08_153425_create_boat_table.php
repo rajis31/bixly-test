@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer("length");
             $table->integer("width");
             $table->string("hin")->unique();
-            $table->decimal("total_hours", 2);
+            $table->decimal("current_hours", 2);
             $table->integer("service_interval");
             $table->date("next_service");
         });

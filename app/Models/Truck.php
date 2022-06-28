@@ -21,4 +21,6 @@ class Truck extends Model
         "service_interval",
         "next_service"
     ];
+
+    protected $table = "truck";
 }

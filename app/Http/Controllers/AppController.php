@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Boat;
+use App\Models\Cars;
+use App\Models\Truck;
 
 
 class AppController extends Controller
@@ -15,7 +18,11 @@ class AppController extends Controller
         // else {
         //     return redirect("/")->withErrors("Please Login");
         // }
-
-        return view("app");
+        
+        return view("app", [
+            "boats"  => Boat::all(),
+            "cars"   => Cars::all(),
+            "trucks" => Truck::all()
+        ]);
     }
 }
