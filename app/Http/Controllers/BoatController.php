@@ -58,7 +58,7 @@ class BoatController extends Controller
      */
     public function show($id)
     {
-        //
+        return Boat::find($id);
     }
 
     /**
