@@ -1,7 +1,6 @@
 @extends("layouts.base")
 
 
-
 @section("body")
 
 <!-- Header -->
@@ -311,13 +310,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" class="form update-vehicle-form" method="POST">
+                <form action="" class="form update-vehicle-form" method="PUT">
                     
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary update-vehicle-submit">Update Vehicle</button>
             </div>
         </div>
     </div>
