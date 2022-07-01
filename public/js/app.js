@@ -1,4 +1,3 @@
-
 const filter_vehicle_form_fields = function () {
     // Adjust the form field based on vehicle type selected 
 
@@ -17,10 +16,14 @@ const filter_vehicle_form_fields = function () {
 }
 
 
-const create_vehicle_record = function () {
-    // Send vehicle created to backend 
+const create_vehicle = function () {
 
+    // Generate a new vehicle record on the backend and refresh page
+
+    let vehicle_selected = document.querySelector(".custom-select");
     let add_vehicle_submit = document.querySelector(".add-vehicle-submit");
+    let form_fields = document.querySelectorAll(".form-group");
+
     add_vehicle_submit.addEventListener("click", async () => {
         const data = {};
 
@@ -69,7 +72,6 @@ const create_vehicle_record = function () {
     });
 }
 
-// Delete Vehicle 
 const delete_vehicle = function () {
     // Delete Selected Vehicle
 
@@ -82,11 +84,11 @@ const delete_vehicle = function () {
 
         btn.addEventListener("click", function () {
             const delete_vehicle_modal = document.querySelector(".delete-vehicle-modal");
-            const VIN                  = vehicleElement.querySelectorAll("td")[0].innerText;
-            const VEHICLE_TYPE         = vehicleElement.querySelector("th")
-                                                       .innerText
-                                                       .toLowerCase() + "s";
-            const ID                   = vehicleElement.getAttribute("identification");
+            const VIN = vehicleElement.querySelectorAll("td")[0].innerText;
+            const VEHICLE_TYPE = vehicleElement.querySelector("th")
+                .innerText
+                .toLowerCase() + "s";
+            const ID = vehicleElement.getAttribute("identification");
             delete_vehicle_modal.querySelector(".modal-body").innerHTML =
                 `Are you sure you want to delete this vehicle with VIN/HIN: ${VIN}?`;
 
@@ -101,20 +103,58 @@ const delete_vehicle = function () {
                     },
                 }).then(res => res.json());
 
-                fetch(window.location.origin + "/api/" + VEHICLE_TYPE + "/"+ID, {
+                fetch(window.location.origin + "/api/" + VEHICLE_TYPE + "/" + ID, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': csrf.csrf,
                         "Authorization": "Bearer " + getCookie("token")
                     },
                 }).then(res => window.location.reload())
-                  .catch(err => console.log(err));
+                    .catch(err => console.log(err));
             });
 
         });
     });
 }
 
+const update_vehicle = function () {
+    // updated selected vehicle
+    const update_vehicle_btns = document
+        .querySelectorAll("button[data-target='#update_vehicle']");
+
+    update_vehicle_btns.forEach(btn => {
+        btn.addEventListener("click", function () {
+            const data_row     = update_vehicle_btns[0].parentElement.parentElement;
+            const vehicle_type = data_row.querySelector("th").toLowerCase() + "s";
+            const vehicle_id   = data_row.getAttribute("identification");
+
+            const csrf = await fetch(window.location.origin + "/api/csrf", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + getCookie("token")
+                },
+            }).then(res => res.json());
+
+            const res = await fetch(window.location.origin + "/api/" + vehicle_selected.value + "s", {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrf.csrf,
+                    "Authorization": "Bearer " + getCookie("token")
+                },
+                body: JSON.stringify(data)
+            }).then(res => res.json())
+                .catch(err => err);
+
+
+        })
+    })
+}
+
 filter_vehicle_form_fields();
-create_vehicle_record();
+create_vehicle();
 delete_vehicle();
+update_vehicle();

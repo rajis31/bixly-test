@@ -25,14 +25,21 @@
                 <th scope="row">Boat</th>
                 <td>{{ $boat->hin }}</td>
                 <td>{{ $boat->created_at }}</td>
-                <td> <button class="btn btn-primary">Update</button> </td>
+                <td> 
+                    <button 
+                        class="btn btn-primary" 
+                        data-toggle="modal" 
+                        data-target="#update_vehicle"
+                    >
+                        Update
+                    </button> 
+                </td>
                 <td>
                     <button class="btn btn-warning delete-vehicle-btn" data-toggle="modal"
                         data-target="#delete_vehicle">
                         Delete
                     </button>
                 </td>
-                <td class="d-none"> {{ $boat->make }}  </td>
             </tr>
         @endforeach
 
@@ -41,7 +48,15 @@
                 <th scope="row">Truck</th>
                 <td>{{ $truck->vin }}</td>
                 <td>{{ $truck->created_at }}</td>
-                <td> <button class="btn btn-primary">Update</button> </td>
+                <td> 
+                    <button 
+                        class="btn btn-primary" 
+                        data-toggle="modal" 
+                        data-target="#update_vehicle"
+                    >
+                        Update
+                    </button>      
+                </td>
                 <td>
                     <button class="btn btn-warning delete-vehicle-btn" data-toggle="modal"
                         data-target="#delete_vehicle">
@@ -56,7 +71,15 @@
                 <th scope="row">Car</th>
                 <td>{{ $car->vin }}</td>
                 <td>{{ $car->created_at }}</td>
-                <td> <button class="btn btn-primary">Update</button> </td>
+                <td>  
+                    <button 
+                        class="btn btn-primary" 
+                        data-toggle="modal" 
+                        data-target="#update_vehicle"
+                    >
+                        Update
+                    </button> 
+                </td>
                 <td>
                     <button class="btn btn-warning delete-vehicle-btn" data-toggle="modal"
                         data-target="#delete_vehicle">
@@ -70,12 +93,13 @@
 </table>
 
 
-
 <!-- Add Vehicle -->
-<div class="card">
-    <button data-toggle="modal" data-target="#add_vehicle">
+<dic class="container d-flex justify-content-center">
+<div>
+    <button class="btn btn-success" data-toggle="modal" data-target="#add_vehicle">
         Add Vehicle
     </button>
+</div>
 </div>
 
 <div class="modal fade" id="add_vehicle">
@@ -271,6 +295,29 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary">Yes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Vehicle -->
+<div class="modal fade" id="update_vehicle">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Vehicle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" class="form update-vehicle-form" method="POST">
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary update-vehicle-submit">Update Vehicle</button>
             </div>
         </div>
     </div>
