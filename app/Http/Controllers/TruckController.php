@@ -24,7 +24,20 @@ class TruckController extends Controller
      */
     public function create()
     {
+        $validated = $request->validate([
+            'vin'              => 'required|unique:boat',
+            'make'             => 'required',
+            'model'            => 'required',
+            'year'             => 'required',
+            'seats'            => 'required',
+            'bed_length'       => 'required',
+            'color'            => 'required',
+            'current_mileage'  => 'required',
+            'service_interval' => 'required',
+            'next_service'     => 'required'
+        ]);
 
+        return Truck::create($request->all());
     }
 
     /**
