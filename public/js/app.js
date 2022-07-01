@@ -16,6 +16,22 @@ const filter_vehicle_form_fields = function () {
 }
 
 
+const get_csrf = async function () {
+    // get csrf token everytime api endpoint is called 
+
+    const csrf = await fetch(window.location.origin + "/api/csrf", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "Authorization": "Bearer " + getCookie("token")
+        },
+    }).then(res => res.json());
+
+    return csrf.csrf;
+}
+
+
 const create_vehicle = function () {
 
     // Generate a new vehicle record on the backend and refresh page
@@ -34,21 +50,14 @@ const create_vehicle = function () {
         });
 
 
-        const csrf = await fetch(window.location.origin + "/api/csrf", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + getCookie("token")
-            },
-        }).then(res => res.json());
+        let csrf = await get_csrf();
 
         const res = await fetch(window.location.origin + "/api/" + vehicle_selected.value + "s", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrf.csrf,
+                'X-CSRF-TOKEN': csrf,
                 "Authorization": "Bearer " + getCookie("token")
             },
             body: JSON.stringify(data)
@@ -94,23 +103,16 @@ const delete_vehicle = function () {
 
             yes_btn.addEventListener("click", async function () {
 
-                const csrf = await fetch(window.location.origin + "/api/csrf", {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        "Authorization": "Bearer " + getCookie("token")
-                    },
-                }).then(res => res.json());
+                let csrf = await get_csrf();
 
                 fetch(window.location.origin + "/api/" + VEHICLE_TYPE + "/" + ID, {
                     method: 'DELETE',
                     headers: {
-                        'X-CSRF-TOKEN': csrf.csrf,
+                        'X-CSRF-TOKEN': csrf,
                         "Authorization": "Bearer " + getCookie("token")
                     },
                 }).then(res => window.location.reload())
-                    .catch(err => console.log(err));
+                    .catch(err => err);
             });
 
         });
@@ -122,60 +124,96 @@ const update_vehicle = function () {
     const update_vehicle_btns = document
         .querySelectorAll("button[data-target='#update_vehicle']");
 
-    update_vehicle_btns.forEach(btn => {
+    update_vehicle_btns.forEach((btn, idx) => {
         btn.addEventListener("click", async function () {
-            const data_row     = update_vehicle_btns[0].parentElement.parentElement;
+            const data_row = update_vehicle_btns[idx].parentElement.parentElement;
             const vehicle_type = data_row.querySelector("th").innerText.toLowerCase() + "s";
-            const vehicle_id   = data_row.getAttribute("identification");
+            const vehicle_id = data_row.getAttribute("identification");
 
-            const csrf = await fetch(window.location.origin + "/api/csrf", {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    "Authorization": "Bearer " + getCookie("token")
-                },
-            }).then(res => res.json());
-
-            const res = await fetch(window.location.origin + "/api/" + vehicle_type +"/"+vehicle_id, {
+            let csrf = await get_csrf();
+            const res = await fetch(window.location.origin + "/api/" + vehicle_type + "/" + vehicle_id, {
                 method: 'GET',
                 headers: {
-                    'X-CSRF-TOKEN': csrf.csrf,
+                    'X-CSRF-TOKEN': csrf,
                     "Authorization": "Bearer " + getCookie("token")
                 }
             })
-            .then(res => res.json())
-            .catch(err => err);
+                .then(res => res.json())
+                .catch(err => err);
 
             // Add the vehicle info to the update form
-            if(await res){
+            if (await res) {
+                const update_vehicle_modal = document.querySelector("#update_vehicle");
                 const update_vehicle_form = document.querySelector(".update-vehicle-form");
+                update_vehicle_form.setAttribute("identification", res.id);
+                update_vehicle_modal.querySelector(".modal-footer").innerHTML = "";
                 update_vehicle_form.innerHTML = "";
-                for(let i=0; i<Object.keys(res).length; i++){
 
-                    let div        = document.createElement("div");
+
+                delete res.id;
+                delete res.created_at;
+                delete res.updated_at;
+
+                let data_names = Object.keys(res);
+                let data_values = Object.values(res);
+
+                for (let i = 0; i < Object.keys(res).length; i++) {
+
+                    let div = document.createElement("div");
                     div.classList.add("form-group");
 
-                    let data_name  = Object.keys(res)[i];
-                    let data_value = Object.values(res)[i]; 
 
-                    let label      = document.createElement("label");
-                    label.setAttribute("for",data_name);
+                    let label = document.createElement("label");
+                    label.setAttribute("for", data_names[i]);
+                    label.style.width = "200px";
+                    label.innerText = data_names[i].toUpperCase();
 
                     let input = document.createElement("input");
-                    input.setAttribute("name", data_name);
-                    input.value = data_value;
+                    input.setAttribute("name", data_names[i]);
+                    input.value = data_values[i];
 
                     div.appendChild(label);
                     div.appendChild(input);
 
                     update_vehicle_form.appendChild(div);
                 }
+
+                let btn = document.createElement("button");
+                btn.classList.add("update-vehicle-btn", "btn", "btn-primary", "ml-auto");
+                btn.innerText = "Submit";
+                btn.setAttribute("type", "button");
+                update_vehicle_modal.querySelector(".modal-footer").appendChild(btn);
+
+
+                btn.addEventListener("click", async function () {
+                    const data = {};
+                    data.id = update_vehicle_form.getAttribute("identification");
+
+                    let labels = update_vehicle_form.querySelectorAll("label");
+                    let inputs = update_vehicle_form.querySelectorAll("input");
+
+                    for (let i = 0; i < labels.length; i++) {
+                        data[labels[i].getAttribute("for")] = inputs[i].value;
+                    }
+
+
+                    let csrf = await get_csrf();
+
+                    fetch(window.location.origin + "/api/" + vehicle_type + "/" + vehicle_id, {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf,
+                            "Authorization": "Bearer " + getCookie("token")
+                        },
+                        body: JSON.stringify(data)
+                    }).then(res => window.location.reload())
+                        .catch(err => err);
+
+                })
+
             }
-
-            console.log(await res);
-
-
         })
     })
 }
