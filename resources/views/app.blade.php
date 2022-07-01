@@ -13,36 +13,51 @@
         </tr>
     </thead>
     <tbody>
+
         @foreach($boats as $boat)
-            <tr identification="{{ $boat->hin }}">
+            <tr identification="{{ $boat->id }}">
                 <th scope="row">Boat</th>
                 <td>{{ $boat->hin }}</td>
                 <td>{{ $boat->created_at }}</td>
                 <td> <button class="btn btn-primary">Update</button> </td>
-                <td> <button class="btn btn-warning">Delete</button> </td>
+                <td>
+                    <button class="btn btn-warning delete-vehicle-btn" data-toggle="modal"
+                        data-target="#delete_vehicle">
+                        Delete
+                    </button>
+                </td>
             </tr>
         @endforeach
 
         @foreach($trucks as $truck)
-            <tr identification="{{ $truck->vin }}">
+            <tr identification="{{ $truck->id }}">
                 <th scope="row">Truck</th>
                 <td>{{ $truck->vin }}</td>
                 <td>{{ $truck->created_at }}</td>
                 <td> <button class="btn btn-primary">Update</button> </td>
-                <td> <button class="btn btn-warning">Delete</button> </td>
+                <td>
+                    <button class="btn btn-warning delete-vehicle-btn" data-toggle="modal"
+                        data-target="#delete_vehicle">
+                        Delete
+                    </button>
+                </td>
             </tr>
         @endforeach
 
         @foreach($cars as $car)
-            <tr identification="{{ $car->vin }}">
+            <tr identification="{{ $car->id }}">
                 <th scope="row">Car</th>
                 <td>{{ $car->vin }}</td>
                 <td>{{ $car->created_at }}</td>
                 <td> <button class="btn btn-primary">Update</button> </td>
-                <td> <button class="btn btn-warning">Delete</button> </td>
+                <td>
+                    <button class="btn btn-warning delete-vehicle-btn" data-toggle="modal"
+                        data-target="#delete_vehicle">
+                        Delete
+                    </button>
+                </td>
             </tr>
         @endforeach
-
 
     </tbody>
 </table>
@@ -56,11 +71,11 @@
     </button>
 </div>
 
-<div class="modal fade" id="add_vehicle" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="add_vehicle">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Vehicle</h5>
+                <h5 class="modal-title">Add Vehicle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -234,6 +249,26 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Vehicle -->
+<div class="modal delete-vehicle-modal" id="delete_vehicle">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Vehicle Record</h5>
+                <button type="button" class="close"  data-dismiss="modal" >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @push("js")
     <script src="{{ asset('js/helpers.js') }}"></script>
