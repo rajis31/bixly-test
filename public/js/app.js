@@ -123,9 +123,9 @@ const update_vehicle = function () {
         .querySelectorAll("button[data-target='#update_vehicle']");
 
     update_vehicle_btns.forEach(btn => {
-        btn.addEventListener("click", function () {
+        btn.addEventListener("click", async function () {
             const data_row     = update_vehicle_btns[0].parentElement.parentElement;
-            const vehicle_type = data_row.querySelector("th").toLowerCase() + "s";
+            const vehicle_type = data_row.querySelector("th").innerText.toLowerCase() + "s";
             const vehicle_id   = data_row.getAttribute("identification");
 
             const csrf = await fetch(window.location.origin + "/api/csrf", {
@@ -137,17 +137,43 @@ const update_vehicle = function () {
                 },
             }).then(res => res.json());
 
-            const res = await fetch(window.location.origin + "/api/" + vehicle_selected.value + "s", {
+            const res = await fetch(window.location.origin + "/api/" + vehicle_type +"/"+vehicle_id, {
                 method: 'GET',
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrf.csrf,
                     "Authorization": "Bearer " + getCookie("token")
-                },
-                body: JSON.stringify(data)
-            }).then(res => res.json())
-                .catch(err => err);
+                }
+            })
+            .then(res => res.json())
+            .catch(err => err);
+
+            // Add the vehicle info to the update form
+            if(await res){
+                const update_vehicle_form = document.querySelector(".update-vehicle-form");
+                update_vehicle_form.innerHTML = "";
+                for(let i=0; i<Object.keys(res).length; i++){
+
+                    let div        = document.createElement("div");
+                    div.classList.add("form-group");
+
+                    let data_name  = Object.keys(res)[i];
+                    let data_value = Object.values(res)[i]; 
+
+                    let label      = document.createElement("label");
+                    label.setAttribute("for",data_name);
+
+                    let input = document.createElement("input");
+                    input.setAttribute("name", data_name);
+                    input.value = data_value;
+
+                    div.appendChild(label);
+                    div.appendChild(input);
+
+                    update_vehicle_form.appendChild(div);
+                }
+            }
+
+            console.log(await res);
 
 
         })
