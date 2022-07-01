@@ -51,10 +51,8 @@ class UserController extends Controller
     }
 
     public function logout(Request $request){
-        auth()->user()->tokens()->delete();
-
-        return [
-            "message"=> "Token Destroyed",
-        ];
+        Auth::logout();
+        setcookie("token", "", 1);
+        return Redirect::to("/");
     }
 }

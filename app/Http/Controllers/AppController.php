@@ -12,17 +12,15 @@ use App\Models\Truck;
 class AppController extends Controller
 {
     public function showPage(){
-        // if(Auth::check()){
-        //     return view("app");
-        // }
-        // else {
-        //     return redirect("/")->withErrors("Please Login");
-        // }
-        
-        return view("app", [
-            "boats"  => Boat::all(),
-            "cars"   => Cars::all(),
-            "trucks" => Truck::all()
-        ]);
+        if(Auth::check()){
+            return view("app", [
+                "boats"  => Boat::all(),
+                "cars"   => Cars::all(),
+                "trucks" => Truck::all()
+            ]);
+        }
+        else {
+            return redirect("/")->withErrors("Please Login");
+        }
     }
 }

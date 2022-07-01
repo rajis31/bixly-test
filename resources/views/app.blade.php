@@ -1,6 +1,12 @@
 @extends("layouts.base")
 
+
+
 @section("body")
+
+<!-- Header -->
+<x-header></x-header>
+
 <!-- Display Vehicles -->
 <table class="table">
     <thead class="thead-dark">
@@ -26,6 +32,7 @@
                         Delete
                     </button>
                 </td>
+                <td class="d-none"> {{ $boat->make }}  </td>
             </tr>
         @endforeach
 
